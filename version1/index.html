@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>One button game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="js/phaser.min.js"></script>
+    <script src="js/mqtt.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/mqttCon.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            background-color: #444444;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game"></div>
+
+    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+        <form>
+            <div class="form-row">
+                <div style="margin-top: 20px; margin-bottom: 50px;"></div>
+                <div class="col">
+                    <label for="speed" style="font-size: 20px; color: white">Velocidade:</label>
+                </div>
+                <div class="col-4">
+                    <input onchange="updateValues()" type="number" class="form-control" id="speed">
+                </div>
+                <div class="col"></div>
+                <div class="col">
+                    <label for="threshold" style="font-size: 20px; color: white">Limite:</label>
+                </div>
+                <div class="col-4">
+                    <input onchange="updateValues()" type="number" class="form-control" id="threshold">
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

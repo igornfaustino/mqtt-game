@@ -1,3 +1,4 @@
+var scale = (1.82 * screen.height / 1080)
 
 var game = new Phaser.Game(
     320, // width
@@ -13,6 +14,7 @@ var game = new Phaser.Game(
 
 var moveUp = false;
 var moveDown = true;
+var pos;
 
 
 // when the game preloads, graphic assets are loaded
@@ -34,7 +36,7 @@ function onCreate() {
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-    game.scale.setUserScale(1.9, 1.9, 0, 0)
+    game.scale.setUserScale(scale, scale, 0, 0)
     game.scale.updateLayout();
 
     button = game.add.button(
@@ -44,27 +46,30 @@ function onCreate() {
         function reset() {
             score = 0;
             updateHud();
-            releaseBarbell()
+            barbell.y = floor;
+            pos = floor;
+            moveUp = false;
         },
         this,
         0,
         1,
         2,
         3);
-    
+
     button.scale.setTo(0.2, 0.2)
 
     // add barbell to the game
     barbell = game.add.sprite(game.world.centerX, game.world.centerY, "barbell")
     barbell.scale.setTo(0.3, 0.3)
     barbell.x = game.width / 2 - barbell.width / 2;
+    barbell.y = 250;
 
 
     // add line to the game
     line = game.add.sprite(0, 0, "line")
     line.scale.setTo(0.2, 0.2)
     line.x = game.width / 2 - line.width / 2 + 25;
-    line.y = 180
+    line.y = 50
 
 
     // create and place the text showing speed and score
@@ -76,39 +81,40 @@ function onCreate() {
 
     floor = barbell.y
     topPosition = line.y - barbell.height / 2
+    pos = floor;
 
     // update text content
     updateHud();
 }
 
 function onUpdate() {
-    if (moveDown && barbell.y < floor) {
-        barbell.y += 4
-    } else if (moveUp && barbell.y > topPosition) {
+    if (moveUp && barbell.y >= topPosition) {
         barbell.y -= 4
+    } else if (!moveUp) {
+        if (barbell.y > pos) {
+            barbell.y -=4
+        } else if (barbell.y < pos) {
+            barbell.y += 4
+        }
     }
+}
+
+function getPos(value) {
+    return ((value * (line.y - floor) / threshold) + floor)
 }
 
 function raiseBarbell() {
     moveUp = true;
-    moveDown = false
     score++;
     updateHud();
 }
 
-function releaseBarbell() {
+
+function moveBarbell(value) {
     moveUp = false;
-    moveDown = true;
+    pos = getPos(value)
 }
 
 function updateHud() {
     hudText.text = score
-}
-
-
-function fire() {
-    ball.xSpeed += Math.cos(arrow.angle * degToRad) * power / 20;
-    ball.ySpeed += Math.sin(arrow.angle * degToRad) * power / 20;
-    updateHud();
-    rotateDirection *= -1;
 }

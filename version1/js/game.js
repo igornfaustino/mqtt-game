@@ -1,4 +1,6 @@
 
+var scale = (1.82 * screen.height / 1080)
+
 var game = new Phaser.Game(
     320, // width
     480, // height
@@ -19,6 +21,7 @@ function onPreload() {
     game.load.image("deadly", "assets/deadly.png");
     game.load.image("coin", "assets/coin.png");
     game.load.image("arrow", "assets/arrow.png");
+    game.load.image("feedback", "assets/ball_light.png");
 
     console.log("assets load with success...")
 }
@@ -31,13 +34,19 @@ function onCreate() {
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-    game.scale.setUserScale(1.9, 1.9, 0, 0)
+    game.scale.setUserScale(scale, scale, 0, 0)
     game.scale.updateLayout();
 
     // add ball to the world
     ball = game.add.sprite(game.world.centerX, game.world.centerY, "ball");
     ball.anchor.x = 0.5;
     ball.anchor.y = 0.5;
+
+    // add feedback
+    feedback = game.add.sprite(game.world.centerX, game.world.centerY, "feedback");
+    feedback.anchor.x = 0.5;
+    feedback.anchor.y = 0.5;
+    feedback.scale.setTo(0, 0)
 
     // ball starting speed
     ball.xSpeed = 0;
@@ -78,6 +87,9 @@ function onUpdate() {
     ball.x += ball.xSpeed;
     ball.y += ball.ySpeed;
 
+    feedback.x = ball.x;
+    feedback.y = ball.y;
+
     // handle wall bounce
     wallBounce();
 
@@ -102,6 +114,7 @@ function onUpdate() {
         if (getDistance(ball, deadlyArray[i]) < (ballRadius * 2) * (ballRadius * 2)) {
             game.camera.shake(0.05, 100)
             score = 0;
+            feedback.scale.setTo(0, 0)
             removeDeadly()
             placeDeadly()
             updateHud();
@@ -132,6 +145,16 @@ function removeDeadly() {
         deadlyArray[i].kill()
     }
     deadlyArray = []
+}
+
+function getScale(value) {
+    return (value / threshold)
+}
+
+function setFeedback(value) {
+    let scale = getScale(value)
+    scale = scale >= 1 ? 1 : scale
+    feedback.scale.setTo(scale, scale)
 }
 
 function illegalDeadly() {
@@ -216,6 +239,5 @@ function updateHud() {
 function fire() {
     ball.xSpeed += Math.cos(arrow.angle * degToRad) * power / 20;
     ball.ySpeed += Math.sin(arrow.angle * degToRad) * power / 20;
-    updateHud();
     rotateDirection *= -1;
 }

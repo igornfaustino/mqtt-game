@@ -10,8 +10,8 @@ client.on("message", function (topic, payload) {
         raiseBarbell()
     }
 
-    if (valueAboveThreshold && value < threshold) {
-        releaseBarbell()
+    if (value < threshold) {
+        moveBarbell(value)
         valueAboveThreshold = false
     }
 })

@@ -8,6 +8,7 @@ var score = 0; // the score
 var coin; // the coin you have to collect
 var deadlyArray = []; // an array which will be filled with enemies
 var gameOver = false; // flag to know if the game is over
+var feedback;
 
 // these settings can be modified to change gameplay
 var friction = 0.99; // friction affects ball speed

@@ -9,6 +9,7 @@ client.on("message", function (topic, payload) {
         console.log(value)
         fire();
     }
+    setFeedback(value)
 
     valueAboveThreshold = (valueAboveThreshold && value < threshold) ? false : true
 })

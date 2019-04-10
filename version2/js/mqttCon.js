@@ -1,4 +1,4 @@
-var client = mqtt.connect("http://localhost:9001")
+var client = mqtt.connect(url)
 client.subscribe("game")
 
 client.on("message", function (topic, payload) {

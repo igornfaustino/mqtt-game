@@ -8,6 +8,9 @@ var time = 3
 var pkgPerSec = 500
 var valueAboveThreshold = false
 
+// EDIT THIS TO CHANGE THE WS URL
+var url = "http://localhost:9001"
+
 window.onload = function () {
     document.getElementById("b_threshold").value = b_threshold;
     document.getElementById("u_threshold").value = u_threshold;

@@ -8,8 +8,8 @@ client.on("message", function (topic, payload) {
     const value = parseInt(payload.toString())
     console.log(value)
     if (!shooting) {
+        pullArrow(value)
         if (value >= b_threshold && value <= u_threshold) {
-            pullArrow()
             count++;
             if (count == pkgPerSec) {
                 timePass++;
@@ -40,7 +40,7 @@ client.on("message", function (topic, payload) {
             count = 0
             timePass = 0
         } else {
-            releaseArrow()
+            resetInfo()
             count = 0
             timePass = 0
         }

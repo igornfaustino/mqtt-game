@@ -1,4 +1,4 @@
-var scale = (1.82*screen.height/1080)
+var scale = (1.82 * screen.height / 1080)
 
 var game = new Phaser.Game(
     320, // width
@@ -14,7 +14,7 @@ var game = new Phaser.Game(
 
 var pull = false;
 var shooting = false;
-
+var pos;
 
 // when the game preloads, graphic assets are loaded
 function onPreload() {
@@ -118,15 +118,26 @@ function onUpdate() {
             resetInfo()
             updateHud()
         }
-    } else if (pull && arrow.y < initialPos + 80) {
-        arrow.y += 4
-    } else if (!pull & arrow.y > initialPos) {
-        arrow.y -= 4
+    } else {
+        if (arrow.y < pos) {
+            arrow.y += 4
+        } else if (arrow.y > pos) {
+            arrow.y -= 4
+        }
     }
 }
 
-function pullArrow() {
-    pull = true
+function pullArrow(value) {
+    shooting = false;
+    if (value >= b_threshold && value <= u_threshold) {
+        pos = initialPos + 80;
+    } else {
+        pos = getPos(value)
+    }
+}
+
+function getPos(value) {
+    return ((value * (initialPos + 80 - initialPos) / b_threshold) + initialPos)
 }
 
 function releaseArrow() {
